@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
-import { JwtPayload } from '@leave-tracker/shared-types';
+import { JwtPayload } from '../types';
 import { AppError } from '../types/errors';
 
 export function signAccessToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): string {
