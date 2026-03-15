@@ -22,8 +22,14 @@ export function createApp() {
   app.use(express.urlencoded({ extended: true }));
 
   // Health check
-  app.get('/health', (_req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  app.get('/health', async (_req, res) => {
+    const { prisma } = await import('./config/database');
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      res.json({ status: 'ok', db: 'connected', timestamp: new Date().toISOString() });
+    } catch (err: any) {
+      res.status(500).json({ status: 'error', db: 'failed', error: err.message });
+    }
   });
 
   // Routes
